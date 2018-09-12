@@ -161,6 +161,14 @@ public:
 #endif
 ```
 
+### 4.确认Server文件
+
+在HelloServer.cpp入口文件中，addServant中写的Obj路由名，要跟发布网页上的对应，所以记得修改。
+
+``` c++
+addServant<HelloTestImp>(ServerConfig::Application + "." + ServerConfig::ServerName + ".HelloTestObj");
+```
+
 
 ### 编译
 在工程代码目录下，输入命令：
