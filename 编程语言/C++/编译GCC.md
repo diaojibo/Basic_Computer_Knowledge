@@ -68,3 +68,10 @@ make安装，结束整个编译过程。
 ![](image/gcc2.png)
 
 可以去源码目录的bin目录下找到新gcc的可执行文件了。
+
+我们还可以在makefile文件里指定gcc的位置：
+
+```
+CC = /data/home/rockctli/bin/gcc-6.4.0/bin/gcc
+CXX = /data/home/rockctli/bin/gcc-6.4.0/bin/g++
+```
