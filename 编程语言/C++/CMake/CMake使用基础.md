@@ -69,3 +69,20 @@ set(COMMON_OBJ A B C)
 
 add_executable(Main ${COMMON_OBJ})
 ```
+
+### cmake命令使用
+两种使用方式：
+
+ - cmake [option] <path-to-source\> 指向含有顶级CMakeLists.txt的那个目录
+ - cmake [option] <path-to-existing-build\> 指向含有CMakeCache.txt的那个目录
+
+第一种方式用于第一次生成cmake makefile，此后可以在build dir里直接cmake . **注意"."表示当前目录**,意思便是，我们假定在一个build文件夹，然后用cmake 命令指定cmakeList所在的位置，然后这里就会把一些预编译信息存到build文件夹里。cpp的使用习惯都是，经常需要开启一个build文件夹来存放编译的结果。如果当前目录已经有cmakeList，那就会使用第二种方式。
+
+**Cmake推荐建立build目录进行编译，所有的中间文件都会生成在build目录下，需要删除时直接清空该目录即可。这就是所谓的外部编译方式。**
+
+#### 常用选项
+1. -G <generator-name\> 指定 **makefile生成器** 的名字。例如：cmake -G "MinGW Makefiles";注意generator是大小写敏感的，即使是在windows下。generator所用的命令(gcc,cl等)最好已经设置在环境变量PATH中。有个例外就是生成visual studio的工程不必设置环境变量，只要安装了对应的vs，cmake可以自动找到。
+
+2. -D<var\>:<type\>=<value\> 添加变量及值到CMakeCache.txt中。注意-D后面不能有空格，type为string时可省略。例如：cmake -DCMAKE_BUILD_TYPE:STRING=Debug。MinGW Generator默认生成CMAKE_BUILD_TYPE为空，即release；NMake Generator默认生成CMAKE_BUILD_TYPE为Debug。
+
+3. -U<globbing_expr\> 删除CMakeCache.txt中的变量。注意-U后面不能有空格,支持globbing表达式，比如*,?等。例如：cmake -UCMAKE_BUILD_TYPE。
