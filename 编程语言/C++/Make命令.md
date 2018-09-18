@@ -131,3 +131,25 @@ g++ -c b.c
 在执行main命令是，依赖于main.o a.o b.o三个目标文件(库文件)，因为需要把这三个编译好的库文件链接在一起才能生成一个可执行文件。
 
 由于没有三个目标文件，make程序会去下面找编译出这三个目标文件的方法，找到源文件main.c a.h b.h 等，然后编译出这些目标文件之后会再回到main处将他们链接起来。
+
+### Make命令参数
+我们用gcc编译程序时，可能会用到“-I”（大写i），“-L”（大写l），“-l”（小写l）等参数
+
+例如：
+
+```
+gcc -o hello hello.c -I /home/hello/include -L /home/hello/lib -lworld
+```
+
+上面这句表示在编译hello.c时：
+
+ - -I /home/hello/include表示将/home/hello/include目录作为第一个寻找头文件的目录，寻找的顺序是：/home/hello/include-->/usr/include-->/usr/local/include
+
+ - -L 指定库文件的目录，也就是如果链接时候，需要的动态库或是静态库不在默认的路径中，就需要用-Lxxx指定库文件路径。寻找的顺序是：/home/hello/lib-->/lib-->/usr/lib-->/usr/local/lib
+
+ - -lworld表示在上面的lib的路径中寻找libworld.so动态库文件（如果gcc编译选项中加入了“-static”表示寻找libworld.a静态库文件）,也就是找.so动态库或者.a静态库。
+
+ 综上，-I指定头文件目录，-L指定库文件目录，-l指定库名。
+
+
+所以我们在使用C++第三方库的时候，无非就是要做好两点，第一，用-I参数指定好对应的头文件存放处，头文件指示了有哪些函数可以调用。第二，用-L指定好库存放的地方，并且-l指定对应要加载进的库名。
