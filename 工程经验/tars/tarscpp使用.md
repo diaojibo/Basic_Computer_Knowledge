@@ -169,6 +169,52 @@ public:
 addServant<HelloTestImp>(ServerConfig::Application + "." + ServerConfig::ServerName + ".HelloTestObj");
 ```
 
+### 5.编写客户端
+客户端调用只要包含几个特定头文件就可以了，一个是Servant对应的头文件，可由tars文件生成。
+
+然后include "servant/Communicator.h"
+
+
+``` c++
+int main(int argc,char ** argv)
+{
+    Communicator comm;
+    try
+    {
+        HelloPrx prx;
+        comm.stringToProxy("TestApp.HelloServer.HelloObj@tcp -h 10.120.129.226 -p 20001" , prx);
+        try
+        {
+            string sReq("hello world");
+            string sRsp("");
+
+            int iRet = prx->testHello(sReq, sRsp);
+
+            cout<<"iRet:"<<iRet<<" sReq:"<<sReq<<" sRsp:"<<sRsp<<endl;
+        }
+
+        catch(exception &ex)
+        {
+            cerr << "ex:" << ex.what() << endl;
+        }
+
+        catch(...)
+        {
+            cerr << "unknown exception." << endl;
+        }
+    }
+    catch(exception& e)
+    {
+        cerr << "exception:" << e.what() << endl;
+    }
+    catch (...)
+    {
+        cerr << "unknown exception." << endl;
+    }
+    return 0;
+}
+```
+
 
 ### 编译
 在工程代码目录下，输入命令：
