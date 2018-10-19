@@ -46,18 +46,16 @@ link_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/../lib)
 ```
 
-通过以下代码可以添加链接的外部库，这里链接 libmylib1 和 libmylib2， 这里链接的库可以是静态库也可以是动态库：
+如果之前已经设定好了link_directiories,那么target_link_libraries根本就不需要设定相对路径了，直接链接就行了,动态库静态库都可以。
 
 ```
-link_libraries(mylib1
-    mylib2)
+link_libraries(hiredis)
 ```
 
-如果是链接指定目录指定某个库，则可以用以下方式：
+注意，如果只写库名，那默认优先链接动态库so，后.a，所以要链接静态库要先手动设置。
 
 ```
-target_link_libraries(hello ../mylib1.a
-    hello ../mylib2.so)
+link_libraries(hiredis.a)
 ```
 
 #### Set命令添加变量

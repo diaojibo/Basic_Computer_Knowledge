@@ -153,3 +153,26 @@ gcc -o hello hello.c -I /home/hello/include -L /home/hello/lib -lworld
 
 
 所以我们在使用C++第三方库的时候，无非就是要做好两点，第一，用-I参数指定好对应的头文件存放处，头文件指示了有哪些函数可以调用。第二，用-L指定好库存放的地方，并且-l指定对应要加载进的库名。
+
+### 编译第三方库
+我们需要编译第三方库的步骤就是这么几个：
+
+1. git clone项目下来
+2. 看看是make项目还是cmake，如果是cmake，走cmake编译流程
+3. make项目，直接尝试make，并且指定install的目录到本地指定项目即可。根据一般的规定，只要指定DESTDIR就好
+
+```
+make install DESTDIR=../install
+```
+
+更进一步，直接去指定make脚本里的相关变量：
+
+比如
+
+![](image/make0.png)
+
+我们在makefile里看到安装路径，直接改这里：
+
+```
+make install INSTALL_INCLUDE_PATH=./install/include INSTALL_LIBRARY_PATH=./install/lib
+```
