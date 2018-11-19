@@ -54,3 +54,35 @@ router.get('/peers', function(req, res, next){
 显然我们就知道了，传入的shared对象有getPeers，version，getPeer三个方法。
 
 根据Peer的构造函数，我们知道
+
+我们进入shared里去看一下一些函数的实现。
+
+#### getPeer
+我们看到同文件下的getPeer函数，就是对输入的参数做了一些验证。用了library.scheam这个对象，library在Peers的初始化函数里，我们就能看到是外部传递进来的scope，根据官方教程则可以知道，传入的其实是一个第三方组件z_schema.
+
+getPeer其中做了一些参数验证。并且发现中间调用了privated(自己封装的私有函数)里的getByFilter函数。
+
+#### Private.getByFilter
+这个函数，其实就是像sqlite数据库请求peer表的过程。Filter其实就是一个sql语句过滤器的封装。最后用了dblite这个组件，去向数据库请求对应字段。
+
+![](image/ebookcoin4.png)
+
+### 节点控制
+上面仅仅只是提到了http怎么进行路由，怎么寻找节点。但是对于一个p2p网络，关键点在于，网络中的节点如何初始化，如何互联。
+
+#### 初始化节点
+ebookcoin中，初始化节点一般不通过扫描网络，而是一开始先写死一些在config.json文件中。我们在config.json的peers键值对下，能看到
+
+![](image/ebookcoin5.png)
+
+这个list这样进行配置：
+
+```
+[
+    {
+        ip: 0.0.0.0,
+        port: 7000
+    },
+    ...
+]
+```
