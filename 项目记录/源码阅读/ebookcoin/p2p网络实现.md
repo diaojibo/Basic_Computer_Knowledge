@@ -86,3 +86,23 @@ ebookcoin中，初始化节点一般不通过扫描网络，而是一开始先�
     ...
 ]
 ```
+
+当然启动的时候也可以根据配置提供进去。
+
+#### 写入节点
+写入节点就是持久化，保存到数据库。
+
+重点关注peer.js的onBlockchainReady函数，这个函数会在区块链加载完毕的时候调用。调用之后会把之前说的list里的ip和port一一插入数据库中。
+
+写入成功后，就会执行library.bus.message('peerReady')方法，相当于触发了一个事件，这个事件被触发后，更新节点的动作便发生。
+
+#### 更新节点
+接下来还要注意到onPeerReady这个函数，启用了两个setImmediate，一个是循环更新节点列表，一个是循环更新状态列表。
+
+循环更新节点，调用的是updatePeerList方法
+
+![](image/ebookcoin6.png)
+
+可以见到其中调用了transport模块中的getFromRandomPeer方法，我们去transport.js下看一看。
+
+可以看到getFromRandomPeer方法
