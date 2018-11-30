@@ -39,6 +39,125 @@ truffle init
 
 可以看到会产生如上目录
 
+我们在contracts文件夹中添加solidity代码文件，我们添加一个Wrestling.sol代码。
+
+约100行的代码如下：
+
+```
+pragma solidity ^0.4.18;
+
+    /**
+    * Example script for the Ethereum development walkthrough
+    */
+
+contract Wrestling {
+    /**
+    * Our wrestlers
+    */
+	address public wrestler1;
+	address public wrestler2;
+
+	bool public wrestler1Played;
+	bool public wrestler2Played;
+
+	uint private wrestler1Deposit;
+	uint private wrestler2Deposit;
+
+	bool public gameFinished;
+    address public theWinner;
+    uint gains;
+
+    /**
+    * The logs that will be emitted in every step of the contract's life cycle
+    */
+	event WrestlingStartsEvent(address wrestler1, address wrestler2);
+	event EndOfRoundEvent(uint wrestler1Deposit, uint wrestler2Deposit);
+	event EndOfWrestlingEvent(address winner, uint gains);
+
+    /**
+    * The contract constructor
+    */
+	constructor() public {
+		wrestler1 = msg.sender;
+	}
+
+    /**
+    * A second wrestler can register as an opponent
+    */
+	function registerAsAnOpponent() public {
+        require(wrestler2 == address(0));
+
+        wrestler2 = msg.sender;
+
+        emit WrestlingStartsEvent(wrestler1, wrestler2);
+    }
+
+    /**
+    * Every round a player can put a sum of ether, if one of the player put in twice or
+    * more the money (in total) than the other did, the first wins
+    */
+    function wrestle() public payable {
+    	require(!gameFinished && (msg.sender == wrestler1 || msg.sender == wrestler2));
+
+    	if(msg.sender == wrestler1) {
+    		require(wrestler1Played == false);
+    		wrestler1Played = true;
+    		wrestler1Deposit = wrestler1Deposit + msg.value;
+    	} else {
+    		require(wrestler2Played == false);
+    		wrestler2Played = true;
+    		wrestler2Deposit = wrestler2Deposit + msg.value;
+    	}
+    	if(wrestler1Played && wrestler2Played) {
+    		if(wrestler1Deposit >= wrestler2Deposit * 2) {
+    			endOfGame(wrestler1);
+    		} else if (wrestler2Deposit >= wrestler1Deposit * 2) {
+    			endOfGame(wrestler2);
+    		} else {
+                endOfRound();
+    		}
+    	}
+    }
+
+    function endOfRound() internal {
+    	wrestler1Played = false;
+    	wrestler2Played = false;
+
+    	emit EndOfRoundEvent(wrestler1Deposit, wrestler2Deposit);
+    }
+
+    function endOfGame(address winner) internal {
+        gameFinished = true;
+        theWinner = winner;
+
+        gains = wrestler1Deposit + wrestler2Deposit;
+        emit EndOfWrestlingEvent(winner, gains);
+    }
+
+    /**
+    * The withdraw function, following the withdraw pattern shown and explained here:
+    * http://solidity.readthedocs.io/en/develop/common-patterns.html#withdrawal-from-contracts
+    */
+    function withdraw() public {
+        require(gameFinished && theWinner == msg.sender);
+
+        uint amount = gains;
+
+        gains = 0;
+        msg.sender.transfer(amount);
+    }
+}
+```
+
+耐心理解一下这段代码：这个代码描写了一个wrestling游戏。大致就是两个斗钱多，双方各拿出一笔钱，如果一方是另一方的两倍以上，就是那个人赢了。
+
+根据solidity的语法，合约对象里先是定义了一堆公有的变量(可以公共读取)。wresteler1(这个变量代表合约创建者其实)，wresteler2是挑战者。在构造函数里，合约首先把wrestler1这个变量设置为合约创建者的address，从msg这个全局变量里获得。构造函数只会在创建这个合约的时候才会被调用。
+
+wrestler2通过register函数注册，注意register函数里的require函数。一旦有人已经注册成为了wrestler2，则回滚操作。address初始化的时候是0，如果address不为0了，说明已经被人注册了。register最后还触发了strart event事件，**这里的事件只是方便我们最后追踪用的，我们可以在客户端监听这些事件**。
+
+最后就不难理解核心的wrestle函数了，这是游戏的核心。函数后加了payable，说明这个函数调用时允许发送一定数量的eth金额。调用这个函数以后会先判断游戏是否结束，以及是否游戏参与人进行的调用。最后判断是否两个人都注入了金额，最后判断大小，进入endofgame判定。
+
+withdraw则是取钱函数，只有胜利者才能成功触发。
 
 ### 参考
 
