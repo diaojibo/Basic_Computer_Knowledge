@@ -45,6 +45,41 @@ $gdb hello 11127
 
 gdb可结合IDE具体使用，更多细节可以查阅文档。
 
+#### 调试core文件(定位segment fault)
+core dump又叫核心转储, 当程序运行过程中发生异常, 程序异常退出时, 由操作系统把程序当前的内存状况存储在一个core文件中, 叫core dump. (linux中如果内存越界会收到SIGSEGV信号，然后就会core dump)
+
+在程序运行的过程中，有的时候我们会遇到Segment fault(段错误)这样的错误。这种看起来比较困难，因为没有任何的栈、trace信息输出。该种类型的错误往往与指针操作相关。往往可以通过这样的方式进行定位。
+
+可以这样调试core文件：
+
+```
+gdb [exec file] [core file]
+
+// example
+gdb ./test test.core
+```
+
+当程序被停住了，你需要做的第一件事就是查看程序是在哪里停住的。当你的程序
+调用了一个函数，函数的地址，函数参数，函数内的局部变量都会被压入
+“栈”（Stack）中。你可以用GDB命令来查看当前的栈中的信息。
+
+下面是一些查看函数调用栈信息的GDB命令：
+
+```
+backtrace
+bt
+```
+
+如：
+
+```
+(gdb) bt
+#0 func (n=250) at tst.c:6
+#1 0x08048524 in main (argc=1, argv=0xbffff674) at tst.c:30
+#2 0x400409ed in __libc_start_main () from /lib/libc.so.6
+```
+
+从上可以看出函数的调用栈信息：__libc_start_main --> main()--> func()
 
 ### ldd查看程序依赖库
 作用：用来查看程式运行所需的共享库,常用来解决程式因缺少某个库文件而不能运行的一些问题。
