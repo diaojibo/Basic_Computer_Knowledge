@@ -159,6 +159,58 @@ wrestler2通过register函数注册，注意register函数里的require函数。
 
 withdraw则是取钱函数，只有胜利者才能成功触发。
 
+我们把上面这段代码放到Contract目录下
+
+![](image/truffle1.png)
+
+#### 部署
+接下来，打开 “migrations” 文件夹并创建一个名为 “2_deploy_contracts.js” 的新文件。Migrations 只是帮助我们将合约部署到区块链的脚本。
+
+将下面的代码粘贴到里面，然后保存。
+
+```
+const Wrestling = artifacts.require("./Wrestling.sol")
+
+module.exports = function(deployer) {
+    deployer.deploy(Wrestling);
+};
+```
+
+第1行是用来导入 “Wrestling.sol” 文件的（从 “contracts” 文件夹导出），第4行则将它部署到区块链中。
+
+现在，回到根目录，你会看到两个文件，“truffle.js”和“truffle-config.js”。如果你在Windows上操作，那就删除 “truffle.js”；如果你在另一个系统上操作，删除其中一个或者同时保留它们，都不要紧。这样做的原因是，在 Windows 上有一个命名问题，当我们想要执行 Truffle 命令时，它会打开 “truffle.js” 配置文件而不是读取里面的数据。
+
+我是在 Windows上写的这篇教程，所以我把 “truffle.js” 文件删掉了。然后我会把这段代码放入 truffconfig.js 中:
+
+基本上是说，当使用开发网络时，使用端口7545，连接到127.0.0.1（localhost）的主机。
+
+### 测试合约
+
+在第一部分，我们会使用Ganache。之前的介绍里也有说，它创建了一个虚拟的eth网络。
+
+启动一个新的命令行，并输入以下命令：
+
+```
+ganache-cli -p 7545
+```
+
+它所做的，就是告诉ganache-cli从端口7545启动。
+
+Ganache会为我们生成测试账户，默认情况下，每个账户都有未锁定的100个以太币并，所以我们可以自由地从那里发送以太币。
+
+![](image/truffle2.png)
+
+
+创建好虚拟网络之后，我们新起一个命令行，执行下面命令：
+
+```
+truffle compile
+truffle migrate --network development
+```
+
+![](image/truffle3.png)
+
+
 ### 参考
 
 [教程 | 以太坊开发演练，Part-2：Truffle，Ganache，Geth 和 Mist](https://ethfans.org/posts/ethereum-development-walkthrough-part-2)
