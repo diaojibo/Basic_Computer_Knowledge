@@ -210,6 +210,61 @@ truffle migrate --network development
 
 ![](image/truffle3.png)
 
+Compile 将把我们的 Solidity 代码编译成字节码（以太坊虚拟机 (EVM) 能理解的代码），在我们的例子中，Ganache 模拟了 EVM。
+
+Migrate（迁移） 会把代码部署到区块链，我们之前在 “truffle-config.js” 文件中设置了 “development” 网络，我们可以在那里找到区块链。
+
+![](image/truffle4.png)
+
+现在，如果一切都按照预期进行，你应该会在终端上看到：
+
+
+![](image/truffle5.png)
+
+注意，这里显示了实例化的 Wrestling 合约的地址。
+
+zwlj：由此可知ganache启动的时候，加载了migrations下的文件，migration中export了几个中间件，中间件接受deployer，然后deployer部署contracts里的内容。
+
+在 ganache-cli 运行的命令行界面上，你可以看到正在执行的交易：
+
+![](image/truffle6.png)
+
+注意，它显示了实例化的 Wrestling 合约的地址。
+
+现在输入以下命令启动 Truffle 控制台，这会帮助我们与ganache的区块链进行交互。
+
+```
+truffle console --network development
+```
+
+输入上面命令之后我们就进入控制台了，我们可以尝试做如下交互：
+
+```
+account0 = web3.eth.accounts[0]
+account1 = web3.eth.accounts[1]
+```
+
+它会把第一个帐户的地址分配给变量 account0，第二个帐户分配给变量 account1。Web3 是一个 JavaScript API，它将 RPC 调用包装起来以方便我们与区块链进行交互。 zwlj:这里指的第一个和第二个账户，其实指的是ganache建立时模拟的一系列账户。
+
+![](image/truffle7.png)
+
+然后我们输入：
+
+```
+Wrestling.deployed().then(inst => { WrestlingInstance = inst })
+```
+
+它为 truffle 部署到变量 “WrestlingInstance” 的合约实例分配了一个引用。zwlj:emmmm,简单来说就是拿到了Wrestling合约实例的引用。
+
+执行下一行：
+
+```
+WrestlingInstance.wrestler1.call()
+```
+
+![](image/truffle8.png)
+
+wrestler1显示的是account1，因为合约创建的时候，默认是使用虚拟网络生成的第一个地址作为创建者，这个wrestler1在合约中就是创建者。
 
 ### 参考
 
