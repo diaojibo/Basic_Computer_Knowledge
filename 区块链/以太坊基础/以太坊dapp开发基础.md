@@ -266,6 +266,42 @@ WrestlingInstance.wrestler1.call()
 
 wrestler1显示的是account1，因为合约创建的时候，默认是使用虚拟网络生成的第一个地址作为创建者，这个wrestler1在合约中就是创建者。
 
+然后我们把第二个账户account1注册为一个对手：
+
+```
+WrestlingInstance.registerAsAnOpponent({from: account1})
+```
+
+在这里，“from” 指令会告诉函数应该从哪一个账户触发交易。
+
+在执行这一行之后，它应该会返回类似的内容：
+
+![](image/truffle9.png)
+
+注意，该项交易使用了Gas，并且触发了 “WrestlingStartsEvent” 事件。
+
+![](image/truffle10.png)
+
+现在，玩家们可以开始角力了
+
+```
+WrestlingInstance.wrestle({from: account0, value: web3.toWei(2, "ether")})
+WrestlingInstance.wrestle({from: account1, value: web3.toWei(3, "ether")})
+// End of the first round
+WrestlingInstance.wrestle({from: account0, value: web3.toWei(5, "ether")})
+WrestlingInstance.wrestle({from: account1, value: web3.toWei(20, "ether")})
+// End of the wrestling
+```
+
+“value” 指令用来在交易时发送以太币。“web3.toWei(5, “ether”)” 意味着发送5个以太币，这个值会被转换成 Wei。Wei 是以太币的基本单位（最低面额）。
+
+在执行最后一行时，account1 会是大赢家，因为我们总共投入了 23 个以太币，比我们在 account0 投入的两倍还要多。
+
+Truffle和Ganache的基本功能到此就结束了。
+
+### geth使用
+我们已经使用了 Ganache 来进行开发，现在我们想要试一试更接近真实运行环境的东西
+
 ### 参考
 
 [教程 | 以太坊开发演练，Part-2：Truffle，Ganache，Geth 和 Mist](https://ethfans.org/posts/ethereum-development-walkthrough-part-2)
