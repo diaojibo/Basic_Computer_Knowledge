@@ -22,3 +22,11 @@ export GOPATH=/usr/local/go
 export 
 ```
 
+## 安装docker
+接下来我们安装docker
+
+我们可以根据官方文档来进行安装：[文档](https://docs.docker.com/install/linux/docker-ce/ubuntu/#prerequisites)
+
+由于命令时常变化，就不贴安装方法了。注意安装docker是要先建立仓库的。
+
+输出docker --version查看版本就知道是否成功了。
