@@ -47,6 +47,12 @@ Docker是一个开源的商业产品，有社区版CE和企业版EE，一般个�
 
 运行安装程序完成安装后，Docker 会自动启动。通知栏上会出现个小鲸鱼的图标，这表示 Docker 正在运行。
 
+#### 补充linux安装要点
+Docker的社区版（Docker Community Edition）叫做docker-ce。老版本的Docker包叫做docker或者docker-engine，如果安装了老版本的docker得先卸载然后再安装新版本的docker。docker的发展非常迅速，apt源的更新往往比较滞后。
+
+所以docker官网推荐的安装方式都是去官网doc上查阅。 
+
+
 #### 开始hellow world
 Win下安装好以后，已经帮我们启动了docker服务，我们接下来可以通过以下命令(powershell下)来看我们本地有的镜像：
 
