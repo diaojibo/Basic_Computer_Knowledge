@@ -2,6 +2,8 @@
 以fabric 1.3为例，我们尝试去跑通官方给出的fabric 例子。
 
 ## 执行拉取脚本
+执行官方给出的这个命令
+
 
 ```
 curl -sSL http://bit.ly/2ysbOFE | sudo bash -s 1.3.0
@@ -32,6 +34,10 @@ hyperledger/fabric-orderer     latest              f430f581b46b        2 months 
 hyperledger/fabric-peer        1.3.0               f3ea63abddaa        2 months ago        151MB
 hyperledger/fabric-peer        latest              f3ea63abddaa        2 months ago        151MB
 ```
+
+上面下载下来的镜像列表，我们用 `docker image ls`也能看到，一行代表一个instance，我们会发现每个image id都会有两个instance实例。
+
+执行完命令后我们进入example目录，bin文件夹下，我们可以看到命令帮我们下载了很多需要用到的二进制程序，这些二进制程序其实都是platform-specific的。
 
 ## 参考
 [官方实例文档](https://hyperledger-fabric.readthedocs.io/en/release-1.3/install.html)
