@@ -39,5 +39,12 @@ hyperledger/fabric-peer        latest              f3ea63abddaa        2 months 
 
 执行完命令后我们进入example目录，bin文件夹下，我们可以看到命令帮我们下载了很多需要用到的二进制程序，这些二进制程序其实都是platform-specific的。
 
+![](image/fabric3.png)
+
+### run the network
+我们进到fabric sample的first network文件夹。
+
+这个文件夹下已经有一个启动脚本`byfn.sh`，可以快速部署4个peer节点分属两个不同的org，并且还会启动一个容器服务，用以部署chaincode和加入peer到channel。
+
 ## 参考
 [官方实例文档](https://hyperledger-fabric.readthedocs.io/en/release-1.3/install.html)
