@@ -46,5 +46,23 @@ hyperledger/fabric-peer        latest              f3ea63abddaa        2 months 
 
 这个文件夹下已经有一个启动脚本`byfn.sh`，可以快速部署4个peer节点分属两个不同的org，并且还会启动一个容器服务，用以部署chaincode和加入peer到channel。
 
+跟着文档走的话，很快就能启动一个网络。只需要执行
+
+```
+./byfn.sh -m generate
+```
+
+然后不断地按yes，即可。但是我们还是要慢慢缕清楚整个fabric网络启动的过程。
+
+从脚本启动后输出的日志来看，启动网络主要有这么几个过程：
+
+1. cryptogen加密生成
+2. 创建引导排序服务
+3. 创建channel通道，设置交易配置
+4. 启动Org1的节点
+5. 启动Org2的节点
+
+### 加密生成器crptogen
+
 ## 参考
 [官方实例文档](https://hyperledger-fabric.readthedocs.io/en/release-1.3/install.html)
