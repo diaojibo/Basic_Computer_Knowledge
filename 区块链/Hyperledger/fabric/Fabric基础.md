@@ -44,7 +44,9 @@ Hyperledger Fabric支持构建隐私保护严格的网络，也支持构建相�
 
  - **peer**：存放区块链数据的结点，同时还有endorse和commit功能。
 
-### 简易架构
+### 架构
+
+#### 应用解决方案
 
 ![](image/fabric1.png)
 
@@ -56,6 +58,26 @@ Hyperledger Fabric支持构建隐私保护严格的网络，也支持构建相�
 2. 在 Hyperledger Fabric 网络上部署链码。
 3. 使用 SDK 开发客户端应用。
 
+#### Peer和Orderer
+
+其实Fabric中，组件只有两个：Peer和Orderer，它们就是两个二进制程序。每个Peer中都存放全量的数据（账本），也就是完整的链。**Orderer则是用来形成共识的，也就是跟矿工差不多**。
+
+执行“查询（query）”操作，也就是调用合约中“没有写操作”的接口的时候，只需要指定Peer的地址。调用会执行“写操作”的接口时，还需要另外指定Orderer的地址。
+
+#### System chain
+
+Fabric中有一组特殊的链，叫做“**system chain**”。这组链相当于整个Fabric网络的配置文件，里面记录了所有的Channel信息、参与者的信息。（每个Channel对应一条system chain）。部署Fabric时使用的创世块，就是system chain中的第一个区块。
+
+每个参与者可以将自己的一个Peer地址写入到system chain中，这样的Peer被称为“锚点”（Anchor Peer）。Orderer们从system chain中获得Anchor Peer(实际上应该是Leader Peer)的地址，并将形成的共识通知给它们。
+
+之后Anchor Peer通过Gossip协议，将结论八卦给其它的Peer。
+
+Orderer中的链与Peer中的链是不同的。Oderer的链中存放的是Channel的配置，是system chain，Peer的链中存放的是Channel的数据。比对一下它们的内容就可以知道。
+
+Peer与Orderer交织，数据更新请求在Orderer之间来回穿梭，最终被送往了Anchor Peer，大嘴巴的Anchor Peer转身通知了身边的所有Peer。
+
+组成网络的每一个Peer和Orderer，都是得到了批准的、实名的，想要访问这个网络的用户也需要得到批准，并实名签署自己的操作。
+
 ### 交易流程
 去中心化的设计，必然需要通过投票（多数大于少数）来维持数据一致性，而任何投票都必须经历以下三个过程：
 
@@ -63,5 +85,9 @@ Hyperledger Fabric支持构建隐私保护严格的网络，也支持构建相�
 2. 统计投票结果，若获得多数同意，才能进行下一步；
 3. 将获得多数同意的议案记录下来，且公之于众。
 
+
+
 ### 参考
 [Hyperledger中文文档](https://hyperledgercn.github.io/hyperledgerDocs/blockchain_zh/)
+
+[超级账本HyperLedger：Fabric掰开揉碎，一文解惑](https://www.lijiaocn.com/%E9%A1%B9%E7%9B%AE/2018/06/25/hyperledger-fabric-main-point.html)
