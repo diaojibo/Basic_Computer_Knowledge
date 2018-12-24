@@ -71,10 +71,20 @@ MSP将颁发与校验证书，以及用户认证背后的所有密码学机制�
 
 组织的msp目录中包含的全部是可以公开的证书，没有私钥。组织的msp目录，是要被写入到system chain中的。
 
+用户要想接入到Fabric网络中，必须向拥有根证书私钥的机构，申请一个证书。通过这个限制，保证Fabric网络中的参与者的身份都是真实的（参与者的证书被盗用除外）。
 
+**除了组织的msp目录之外，还有组件的msp目录和用户的msp目录**。组件的msp目录和用户的msp目录**其实是一回事**，只不过组件msp的使用者是Fabric网络中的peer和orderer程序，而用户msp目录的使用者是Fabric网络之外的个人或者客户端。
+
+换言之，访问Fabric网络的个人或者客户端，要有一个账号；组成Fabric的网络的每个Peer和Orderer也要有一个账号。MSP中存放的就是每个账号的私钥和证书。
+
+![](image/fabric10.png)
+
+admincerts目录，这个目录里存放的是某个账号的证书。
+
+在Fabric中有一些操作是可以设置为只有管理员才能执行的，譬如部署合约。怎样判断当前发起操作的是不是管理员呢？答案就是，检查当前用户的证书与admincerts中的证书是否一致。注意，组织msp中的admincerts是被写入到system chain中的。
 
 ## 参考
 
 [9-HyperLedger-Fabric原理-MSP详解（一）-MSP基础](https://zhuanlan.zhihu.com/p/35683522)
 
-[超级账本HyperLedger：Fabric掰开揉碎，一文解惑](https://www.lijiaocn.com/%E9%A1%B9%E7%9B%AE/2018/06/25/hyperledger-fabric-main-point.html)
+[超级账本HyperLedger：Fabric掰开揉碎，一文解惑](https://mp.weixin.qq.com/s/dcTCI7k_tyAqGKbLmzYR_A)
