@@ -62,7 +62,30 @@ hyperledger/fabric-peer        latest              f3ea63abddaa        2 months 
 4. 启动Org1的节点
 5. 启动Org2的节点
 
+
+接下来我们会在步骤上分析fabric网络的部署
+
+## fabric网络部署
+
 ### 加密生成器crptogen
+在MSP基础笔记中初步了解MSP概念之后，我们知道节点都需要证书来证明自己的身份。
+
+我们将使用cryptogen工具为我们生成各种网络实体的加密材料（x509证书）。这些证书是身份的代表，它们允许在我们的网络实体进行交流和交易时进行签名/验证身份验证。
+
+zwlj：也就是说，我们将使用这个工具，为各个节点创建一个证书。
+
+要使用这个证书，我们首先需要写一个**crypto-config.yaml**配置文件，大致内容如下：
+
+![](image/fabric11.png)
+
+除了上面配置之外，还有count变量：
+
+![](image/fabric12.png)
+
+接下来我们要在了解一下交易生成器这个工具
+
+### 配置交易生成器
+这个二进制工具也是帮助我们生成一些初始配置用的，比如创世区块的配置，channel的配置，peer的配置。
 
 ## 参考
 [官方实例文档](https://hyperledger-fabric.readthedocs.io/en/release-1.3/install.html)

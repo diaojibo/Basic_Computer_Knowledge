@@ -83,6 +83,23 @@ admincerts目录，这个目录里存放的是某个账号的证书。
 
 在Fabric中有一些操作是可以设置为只有管理员才能执行的，譬如部署合约。怎样判断当前发起操作的是不是管理员呢？答案就是，检查当前用户的证书与admincerts中的证书是否一致。注意，组织msp中的admincerts是被写入到system chain中的。
 
+Msp目录可以用Fabric提供的cryptogen命令生成，但是用cryptogen命令生成是非常不灵活的，生产环境中，应当使用Fabric提供的另一个组件FabricCA。
+
+注意FabricCA不属于Fabric网络，它是网络之外的一个用来签署证书的服务。借助FabricCA，还可以实现账号的分级，简单说就是一个组织的管理员，可以自由地创建属于该组织的子账号。（这是刚需）
+
+
+### 配置
+配置分两种。
+
+一种是组件的配置文件，也就是orderer的配置文件orderer.yaml以及peer的配置文件core.yaml。一种是system chain中的配置区块。
+
+一个系统无论多庞大、多么复杂，扒到底，永远都是“命令+配置”。peer的配置文件是core.yaml，orderer的配置文件是orderer.yaml。
+
+前面提到过，部署Fabric时使用的创世块（在orderer.yaml中指定的文件），是system chain的第一个区块。**这个区块通常是用configtxgen命令生成的。**
+
+configtxgen除了可以生成创世块，还能将二进制的创世块转换成json格式。
+
+
 ## 参考
 
 [9-HyperLedger-Fabric原理-MSP详解（一）-MSP基础](https://zhuanlan.zhihu.com/p/35683522)
