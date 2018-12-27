@@ -159,6 +159,41 @@ docker-compose -f docker-compose-cli.yaml up -d
 注意：如果要实时查看你的区块链网络的日志，请不要提供-d标志。如果你需要日志流，你需要打开第二个终端来执行CLI命令。
 
 
+启动了这个docker指令后，容器已经在运行了。我们可以通过`sudo docker ps`指令来观看
+
+![](image/fabric14.png)
+
+可以看到启动了6个docker容器，一个叫cli，2个org1节点，2个org2节点，1个order节点。
+
+
+#### 环境变量的设置
+假如我们相对其中一个节点，比如peer0.org1.example.com发出命令操作，我们就必须先设置几个环境变量。当然，一下环境变量不是在我们linux环境设置，而是设置到docker容器环境里。
+
+对于此项目，环境变量其实已经默认写入docker-compose-base.yaml配置文件当中。
+
+```
+# Environment variables for PEER0
+
+CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
+CORE_PEER_ADDRESS=peer0.org1.example.com:7051
+CORE_PEER_LOCALMSPID="Org1MSP"
+CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
+```
+
+#### 创建&加入信道(通过CLI容器)
+之前跑容器的时候，我们知道有个容器叫cli，顾名思义我们应该是要通过这个容器来进行交互。
+
+用以下命令进入容器：
+
+```
+docker exec -it cli bash
+```
+
+如果成功，你将看到下列信息：
+
+```
+root@0d78bb69300d:/opt/gopath/src/github.com/hyperledger/fabric/peer#
+```
 
 ## 参考
 [官方实例文档](https://hyperledger-fabric.readthedocs.io/en/release-1.3/install.html)
