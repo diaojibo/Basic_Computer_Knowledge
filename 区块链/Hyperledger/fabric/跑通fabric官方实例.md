@@ -104,7 +104,42 @@ org1.example.com
 org2.example.com
 ```
 
-接着在项目文件夹下，我们就可以看到生成的配置文件夹crypto-config,里面会有分别的order配置文件夹和org对应的文件夹。
+接着在项目文件夹下，我们就可以看到生成的配置文件夹crypto-config,里面会有分别的order配置文件夹和org对应的文件夹。这些就是相关的证书文件
+
+接下来我们就要使用配置交易生成器来产生一些配置：
+
+#### 运行configtxgen
+
+
+第一步是，设置全局变量，产生orderer创世区块。
+
+```
+export FABRIC_CFG_PATH=$PWD
+../bin/configtxgen -profile TwoOrgsOrdererGenesis -outputBlock ./channel-artifacts/genesis.block
+```
+
+以上算是比较简单的一个创建，可以看出会把创世区块放到channel-artifacts目录下。
+
+第二步，我们需要创建channel transaction配置。请确保替换$CHANNEL_NAME或者将CHANNEL_NAME设置为整个说明中可以使用的环境变量：
+
+```
+export CHANNEL_NAME=mychannel
+
+# this file contains the definitions for our sample channel
+../bin/configtxgen -profile TwoOrgsChannel -outputCreateChannelTx ./channel-artifacts/channel.tx -channelID $CHANNEL_NAME
+```
+
+执行完上述信息后会发现channel-artifacts里会生成一个channel.tx的文件。
+
+在fabric基础的笔记里，我们提到了fabric有一个system chain，里面写入了节点相关的配置，比如锚节点(相当于节点leader)的信息。
+
+第三步，接下来，我们将在正在构建的通道上定义Org1的anchor peer。请再次确认$CHANNEL_NAME已被替换或者为以下命令设置了环境变量：
+
+```
+../bin/configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts/Org1MSPanchors.tx -channelID $CHANNEL_NAME -asOrg Org1MSP
+```
+
+敲下上述命令，channel artifacts文件夹里又会生成一个`Org1MSPanchors.tx`文件。
 
 ## 参考
 [官方实例文档](https://hyperledger-fabric.readthedocs.io/en/release-1.3/install.html)
