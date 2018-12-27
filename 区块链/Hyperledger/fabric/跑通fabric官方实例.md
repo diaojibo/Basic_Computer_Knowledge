@@ -56,7 +56,7 @@ hyperledger/fabric-peer        latest              f3ea63abddaa        2 months 
 
 从脚本启动后输出的日志来看，启动网络主要有这么几个过程：
 
-1. cryptogen加密生成
+1. cryptogen加密生成(生成证书)
 2. 创建引导排序服务
 3. 创建channel通道，设置交易配置
 4. 启动Org1的节点
@@ -89,7 +89,7 @@ zwlj：也就是说，我们将使用这个工具，为各个节点创建一个�
 
 这个生成器对应的配置文件是**configtx.yaml**
 
-### 手动生成配置文件
+### 手动生成配置(启动网络欲操作)
 在之前的案例里，我们运行了byfn.sh来集成我们这些操作。
 
 #### 运行cryptogen
@@ -109,7 +109,7 @@ org2.example.com
 接下来我们就要使用配置交易生成器来产生一些配置：
 
 #### 运行configtxgen
-
+注意这里运行configtxgen都默认使用了配置文件configtx.yaml
 
 第一步是，设置全局变量，产生orderer创世区块。
 
@@ -140,6 +140,25 @@ export CHANNEL_NAME=mychannel
 ```
 
 敲下上述命令，channel artifacts文件夹里又会生成一个`Org1MSPanchors.tx`文件。
+
+同理我们可以得到Org2的配置：
+
+```
+../bin/configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts/Org2MSPanchors.tx -channelID $CHANNEL_NAME -asOrg Org2MSP
+```
+
+#### 启动网络
+我们将利用docker-compose脚本来启动我们的区块链网络。docker-compose文件利用我们之前下载的镜像，并用以前生成的genesis.block来引导orderer。
+
+完成上述的configtxgen步骤之后，准备工作便大致完成了，现在我们可以开始利用docker compose启动网络。我们要指定compose要用的配置文件：
+
+```
+docker-compose -f docker-compose-cli.yaml up -d
+```
+
+注意：如果要实时查看你的区块链网络的日志，请不要提供-d标志。如果你需要日志流，你需要打开第二个终端来执行CLI命令。
+
+
 
 ## 参考
 [官方实例文档](https://hyperledger-fabric.readthedocs.io/en/release-1.3/install.html)
