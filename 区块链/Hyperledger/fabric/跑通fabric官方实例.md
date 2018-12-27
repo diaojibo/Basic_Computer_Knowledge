@@ -85,7 +85,26 @@ zwlj：也就是说，我们将使用这个工具，为各个节点创建一个�
 接下来我们要在了解一下交易生成器这个工具
 
 ### 配置交易生成器
-这个二进制工具也是帮助我们生成一些初始配置用的，比如创世区块的配置，channel的配置，peer的配置。
+这个二进制工具**configtxgen**也是帮助我们生成一些初始配置用的，比如创世区块的配置，channel的配置，peer的配置。
+
+这个生成器对应的配置文件是**configtx.yaml**
+
+### 手动生成配置文件
+在之前的案例里，我们运行了byfn.sh来集成我们这些操作。
+
+#### 运行cryptogen
+之前有介绍这个工具是用来产生证书的，假如我们在配置文件的目录下，手动执行工具，则有：
+
+![](image/fabric13.png)
+
+命令要打sudo，可以看到命令行输出了两个名字：
+
+```
+org1.example.com
+org2.example.com
+```
+
+接着在项目文件夹下，我们就可以看到生成的配置文件夹crypto-config,里面会有分别的order配置文件夹和org对应的文件夹。
 
 ## 参考
 [官方实例文档](https://hyperledger-fabric.readthedocs.io/en/release-1.3/install.html)
