@@ -165,6 +165,8 @@ docker-compose -f docker-compose-cli.yaml up -d
 
 可以看到启动了6个docker容器，一个叫cli，2个org1节点，2个org2节点，1个order节点。
 
+并且从配置文件中，我们看到了docker使用了volume，可以理解为是一种映射，容器中文件的读写都会对应读写到宿主机器的某个目录下。
+
 
 #### 环境变量的设置
 假如我们相对其中一个节点，比如peer0.org1.example.com发出命令操作，我们就必须先设置几个环境变量。当然，一下环境变量不是在我们linux环境设置，而是设置到docker容器环境里。
@@ -193,6 +195,86 @@ docker exec -it cli bash
 
 ```
 root@0d78bb69300d:/opt/gopath/src/github.com/hyperledger/fabric/peer#
+```
+
+观察这个目录下的文件，可以知道这些文件都会被Volume到我们的host机器上。
+
+接下来我们就能通过CLI程序做一些事了，比如我们通知order节点去加载channel的配置。我们之前不是用工具生成了一个channel.tx文件吗，那个就是交易的初始配置，我们可以通知order生成。
+
+但是同时也要注意，我们通过cli来操作时，是有一个默认主体的，这个主体通过环境变量来切换。比如我们默认主体其实是peer0.org1.example.com，**这样我们之后用peer命令的时候，peer就是对应着那个(环境变量的)节点**。
+
+```
+export CHANNEL_NAME=mychannel
+
+# the channel.tx file is mounted in the channel-artifacts directory within your CLI container
+# as a result, we pass the full path for the file
+# we also pass the path for the orderer ca-cert in order to verify the TLS handshake
+# be sure to export or replace the $CHANNEL_NAME variable appropriately
+
+peer channel create -o orderer.example.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/channel.tx --tls --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem
+```
+
+![](image/fabric15.png)
+
+敲下命令之后我们就得到反馈，order返回了一个mychannel.block，mychannel是我们刚才定义的channel名，返回的就是这个channel的一个创世区块。
+
+我们将利用这个创世区块加入信道：
+
+```
+peer channel join -b <channel-ID.block>
+```
+
+得到结果
+
+![](image/fabric15.png)
+
+
+接下来也是重点了，我们刚才的命令只是操作了其中一个节点。假如我们想切换节点来操作，就要改变环境变量，然后再重复上面的操作(**改变peer命令操作的对象**)：
+
+```
+# Environment variables for PEER0
+
+export CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
+export CORE_PEER_ADDRESS=peer0.org1.example.com:7051
+export CORE_PEER_LOCALMSPID="Org1MSP"
+export CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
+```
+
+### 执行chaincode
+我们启动fabric节点，当然就是为了要执行chaincode啊，也就是在区块链上测试dapp环境。
+
+我们执行下面命令：
+
+```
+# this installs the Go chaincode
+peer chaincode install -n mycc -v 1.0 -p github.com/chaincode/chaincode_example02/go/
+```
+
+这个命令将chaincode代码安装到对应的节点文件系统中。
+
+接着，我们需要在channel上初始化这个chaincode。在输入命令的时候我们要用-p参数指定一个**背书策略**。
+
+```
+# be sure to replace the $CHANNEL_NAME environment variable if you have not exported it
+# if you did not install your chaincode with a name of mycc, then modify that argument as well
+
+peer chaincode instantiate -o orderer.example.com:7050 --tls --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem -C $CHANNEL_NAME -n mycc -v 1.0 -c '{"Args":["init","a", "100", "b","200"]}' -P "AND ('Org1MSP.peer','Org2MSP.peer')"
+```
+
+注意 `-P "AND ('Org1MSP.peer','Org2MSP.peer')"`指定了背书策略，要求org1和org2都要有一个节点进行背书。
+
+初始化成功以后，我们就可以开始一些测试性质的操作了：
+
+比如查询：
+
+```
+peer chaincode query -C $CHANNEL_NAME -n mycc -c '{"Args":["query","a"]}'
+```
+
+调用：
+
+```
+peer chaincode invoke -o orderer.example.com:7050 --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem -C $CHANNEL_NAME -n mycc --peerAddresses peer0.org1.example.com:7051 --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt --peerAddresses peer0.org2.example.com:7051 --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt -c '{"Args":["invoke","a","b","10"]}'
 ```
 
 ## 参考
