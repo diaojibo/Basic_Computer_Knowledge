@@ -307,5 +307,10 @@ peer chaincode query -C $CHANNEL_NAME -n mycc -c '{"Args":["query","a"]}'
 peer chaincode invoke -o orderer.example.com:7050 --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem -C $CHANNEL_NAME -n mycc --peerAddresses peer0.org1.example.com:7051 --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt --peerAddresses peer0.org2.example.com:7051 --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt -c '{"Args":["invoke","a","b","10"]}'
 ```
 
+### 幕后
+以上的所有操作，其实byfn.sh脚本文件都帮我们一键完成了。复杂的操作都帮我们封装了起来。
+
+而上述的流程，无非就是通过configtx程序生成一个初始的交易配置channel.tx。然后用这个配置通知order让它生成一个创世区块，然后各个节点通过这个创世区块来假如channel。中途还会涉及到msp的指定，等
+
 ## 参考
 [官方实例文档](https://hyperledger-fabric.readthedocs.io/en/release-1.3/install.html)
