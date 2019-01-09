@@ -42,6 +42,20 @@ git clone https://github.com/hyperledger/fabric.git
 
 然后由于fabric的部署是依赖docker的，节点的部署当然都需要docker镜像，所以我们要去拉镜像。
 
+
+## 关闭所有docker容器
+
+```
+// 杀死当前运行的所有docker 镜像服务
+docker rm -f $(docker ps -aq)
+
+// 清除所有缓存网络
+docker network prune
+
+```
+
+
+
 ## 参考
 
 [区块链开源实现FABRIC快速部署及CLI体验](https://www.taohui.pub/2018/05/22/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%BC%80%E6%BA%90%E5%AE%9E%E7%8E%B0fabric%E5%BF%AB%E9%80%9F%E9%83%A8%E7%BD%B2%E5%8F%8Acli%E4%BD%93%E9%AA%8C/)
