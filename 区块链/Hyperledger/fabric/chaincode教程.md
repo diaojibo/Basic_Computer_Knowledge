@@ -134,3 +134,74 @@ func main() {
 
 #### dev模式进行测试
 通常来说，chaincode都由一个peer节点来启动和维护，但是再dev模式下，我们用户可以自行编译启动来进行测试，这非常有用。
+
+
+在docker 官方实例的案例里，我们下载了fabric-samples实例。我们现在就复用那个项目。
+
+那个项目里有一个chaincode-docker-devmode项目文件夹，我们cd进去。
+
+```
+docker-compose -f docker-compose-simple.yaml up
+```
+
+启动这个项目网络，当然在启动之前，我们最好还是清理一下docker容器，以防冲突。
+
+启动以后，就进入一个容器：
+
+```
+
+// 终端1执行，然后会看到一大堆log
+docker exec -it chaincode bash
+```
+
+上面的那些代码其实都属于sacc项目，我们ls一下就能看到这个sacc项目：
+
+```
+cd sacc
+go build
+
+
+// 终端2执行 看到chaincode starting up然后停住
+CORE_PEER_ADDRESS=peer:7052 CORE_CHAINCODE_ID_NAME=mycc:0 ./sacc
+```
+
+调用install命令可以安装chaincode
+
+```
+// 以下都在终端3完成
+docker exec -it cli bash
+
+peer chaincode install -p chaincodedev/chaincode/sacc -n mycc -v 0
+peer chaincode instantiate -n mycc -v 0 -c '{"Args":["a","10"]}' -C myc
+```
+
+
+```
+peer chaincode invoke -n mycc -c '{"Args":["set", "a", "20"]}' -C myc
+
+peer chaincode query -n mycc -c '{"Args":["query","a"]}' -C myc
+```
+
+### 一些总结
+总而言之，在cli上处理chaincode，下面一些命令是比较重要的：
+
+```
+// install
+peer chaincode install -n asset_mgmt -v 1.0 -p sacc
+```
+
+-p: chaincode的路径, 必须在 GOPATH 目录下, 如 $GOPATH/src/sacc.其余的，-n是name，-v是version
+
+install 交易的过程会将chaincode的源码以一种被称为 ChaincodeDeploymentSpec 的规定格式打包, 并把它安装在一个将要运行该chaincode的peer节点上. Channel上每个要运行chaincode的背书节点都要安装chaincode.
+
+没有chaincode的节点, 不能影响交易的背书阶段, 因为它们不能执行chaincode, 但是他们可以在共识完成后的验证交易阶段进行验证, 并提交交易到账本上.
+
+
+#### 实例化chaincode
+chaincode可能会与任意数量的Channel绑定, 并在每个Channel上独立运行. 即chaincode在多少个Channel上安装并实例化并没有什么影响, 对于每个提交交易的Channel, 其状态都是独立而互不影响的.
+
+```
+peer chaincode instantiate -n sacc -v 1.0 -c '{"Args":["john","0"]}' -P "OR ('Org1.member','Org2.member')"
+```
+
+该指令初始化john的状态为0. 背书策略向Org1或Org2的成员询问所有sacc处理的交易. 即, 为确保交易有效, Org1或Org2必须为调用sacc的结果签名.
