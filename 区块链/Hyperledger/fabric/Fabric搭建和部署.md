@@ -47,7 +47,7 @@ git clone https://github.com/hyperledger/fabric.git
 
 ```
 // 杀死当前运行的所有docker 镜像服务
-docker rm -f $(docker ps -aq)
+sudo docker rm -f $(sudo docker ps -aq)
 
 // 清除所有缓存网络
 docker network prune
