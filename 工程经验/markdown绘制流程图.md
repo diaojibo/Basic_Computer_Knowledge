@@ -31,6 +31,6 @@ rain?(no)->go->e
 2. operation, 表示程序的处理块
 3. subroutine, 表示子程序块
 4. condition, 表示程序的条件判断
-5. inputoutput, 表示程序的出入输出
+5. inputoutput, 表示程序的输入输出
 6. right,left, 表示箭头在当前模块上的起点(默认箭头从下端开始)
 7. yes,no, 表示condition判断的分支(其可以和right,left同时使用)
