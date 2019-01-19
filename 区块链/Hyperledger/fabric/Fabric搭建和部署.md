@@ -54,6 +54,27 @@ docker network prune
 
 ```
 
+## 进入cli容器
+
+```
+sudo docker exec -it cli bash
+```
+
+
+## 部署chaincode
+
+注意部署的chaincode一定要放在cli节点中的GOPATH文件夹下。也就是src那个文件夹下。
+
+
+```
+peer chaincode install -p chaincodedev/chaincode/sacc -n mycc -v 0
+```
+
+### 初始化chaincode
+
+```
+peer chaincode instantiate -n helloworld -v 0 -c '{"Args":["rockctli","fuckyou"]}' -C myc
+```
 
 
 ## 参考

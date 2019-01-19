@@ -54,7 +54,7 @@ logger.info('Hello baby')
 ```
 
 #### 请使用__name__作为logger名称
-虽然不是非得将 logger 的名称设置为 __name__ ，但是这样做会给我们带来诸多益处。在 python 中，变量 __name__ 的名称就是当前模块的名称。比如，在模块 “foo.bar.my_module” 中调用 logger.getLogger(__name__) 等价于调用logger.getLogger(“foo.bar.my_module”) 。当你需要配置 logger 时，你可以配置到 “foo” 中，这样包 foo 中的所有模块都会使用相同的配置。当你在读日志文件的时候，你就能够明白消息到底来自于哪一个模块。
+虽然不是非得将 logger 的名称设置为 `__name__` ，但是这样做会给我们带来诸多益处。在 python 中，变量 `__name__` 的名称就是当前模块的名称。比如，在模块 “foo.bar.my_module” 中调用 logger.getLogger(`__name__`) 等价于调用logger.getLogger(“foo.bar.my_module”) 。当你需要配置 logger 时，你可以配置到 “foo” 中，这样包 foo 中的所有模块都会使用相同的配置。当你在读日志文件的时候，你就能够明白消息到底来自于哪一个模块。
 
 #### 捕捉异常并用traceback记录它
 出问题的时候记录下来是个好习惯，但是如果没有 traceback ，那么它一点儿用也没有。你应该捕获异常并用 traceback 把它们记录下来。比如下面这个例子：
