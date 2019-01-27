@@ -20,10 +20,27 @@ zwlj：这里注意一下WSGI，uWSGI,uwsgi：
 
  - **WSGI（Web Server Gateway Interface）**，是为Python语言定义的Web服务器和Web应用程序或框架之间的一种简单而通用的接口协议，只要web服务器和 web应用都遵守WSGI协议，那么两者之间就可以任意组合。
  - **uwsgi**，是基于二进制的线路协议，与WSGI协议作用相同，但属于uWSGI服务器自有协议。也就是说是一种服务器协议。
- - **uWSGI是Web服务器**，它实现了WSGI协议、uwsgi、http等协议
+ - **uWSGI是Web服务器**，**它实现了WSGI协议、uwsgi、http等协议**
+
+简而言之，uWSGI是一个服务器，uwsgi和WSGI都是协议。
+
+### 安装nginx
+很多方法安装nginx，在ubuntu下应该
+
+```
+sudo apt-get install nginx
+```
+
+就可以了，然后找到nginx的可执行文件，执行
+
+```
+sudo nginx -t
+```
 
 
+可以看到配置文件的位置。
 
+这部分的更进一步操作可以单独看ngnix笔记。
 
 
 
