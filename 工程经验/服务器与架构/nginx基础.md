@@ -25,6 +25,42 @@ sudo nginx -t
  - sites-enabled – 包含一个指向 sites-available 目录中配置文件的软链接。
 
 
+#### 源码安装nginx
+有时候我们用不了包管理软件的时候，就要用源码安装nginx了。
+
+首先我们要安装PCRE
+
+```
+cd /usr/local/src/
+wget http://downloads.sourceforge.net/project/pcre/pcre/8.35/pcre-8.35.tar.gz
+tar zxvf pcre-8.35.tar.gz
+cd pcre-8.35
+./configure
+make && make install
+```
+
+如此一来我们就安装了pcre了。
+
+
+安装nginx：
+
+```
+cd /usr/local/src/
+wget http://nginx.org/download/nginx-1.6.2.tar.gz
+
+tar zxvf nginx-1.6.2.tar.gz
+cd nginx-1.6.2
+./configure --prefix=/usr/local/webserver/nginx --with-http_stub_status_module --with-http_ssl_module --with-pcre=/usr/local/src/pcre-8.35
+
+make
+make install
+```
+
+注意上面在编译的时候，指定了prefix，也就是nginx的安装目录，在/usr/local/webserver/nginx这里。
+
+用下面命令看版本。`/usr/local/webserver/nginx/sbin/nginx -v`
+
+
 ## nginx配置详解
 
 Nginx 的顶层配置文件是 nginx.conf。Nginx 接受多层级的配置文件，这也使得用户可以针对自己的应用进行弹性的配置。
