@@ -16,3 +16,22 @@ JIT即时编译技术，就是做了一个折中。比如Java，会先静态编�
 因此Luajit就是这样的虚拟机技术，比每次都动态解释Lua脚本的原生Lua解释器要快得多。
 
 **Luajit可以说是一个高效的 Lua 实现。**
+
+### Luajit安装使用
+Lua本身就是一个用来增强C或者C++的脚本语言。这里稍微介绍一下Luajit的调用与使用。
+
+使用Luajit，我们只需要在luajit官方下载luajit源码，然后解压后make就ok了。接下来只需要引用luajit中的头文件，引入luajit库，即可使用。
+
+对于C code
+
+``` c
+#include "luajit.h"
+```
+
+对于C++ code
+
+``` c++
+#include "lua.hpp"
+```
+
+在成功引入Luajit库，并且成功引入Lua的头文件以后，我们可以开始进行一些Lua api的调用。
