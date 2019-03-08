@@ -31,6 +31,11 @@ cc_library(
 
 写好配置文件以后，执行 `blade build` 命令即可执行编译。
 
+除此之外还有一些属性定义很常见：
+
+ - **export_incs**: Export_incs 表示对外可见的include文件查找路，依赖于此target的模块编译时将会自动将此目录加入到头文件查到队列中;依赖是传递的。
+ - **prebuilt**: 有时候我们在网上使用一些第三方库，都是使用Makefile来进行构建的。这时候Blade就不太适用了，这时我们就要在生成的library加上prebuilt=True；使用这个参数表示不从源码构建。对应的二进制文件必须存在 lib{32,64}\_{release,debug} 这样的子目录中。**所以要将lib文件软链接到 lib\{32,64\}\_{release,debug}**.
+
 ### 利用环境变量指定不同的gcc编译
 事实上，在编译代码的时候还可采用不同的gcc版本来进行编译。
 
