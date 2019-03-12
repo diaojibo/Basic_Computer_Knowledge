@@ -66,7 +66,7 @@ ffi.cdef([[
 ffi.C.printf("hello world!\n")
 ```
 
-如果是调用第三方函数库：
+如果是调用第三方(动态)函数库【也就是so里那种】：
 
 ``` lua
 local ffi = require 'ffi'
