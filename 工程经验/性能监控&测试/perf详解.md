@@ -71,6 +71,11 @@ perf record -e cpu-clock -g [fp] 程序
 
 程序运行完之后，perf record会生成一个名为perf.data的文件（缺省值），如果之前已有，那么之前的perf.data文件会变为perf.data.old文件.获得这个perf.data文件之后，我们其实还不能直接查看，下面就需要perf report工具进行查看
 
+记录一哈参数的含义：
+
+ - -o 指定输出文件名，默认为perf.data
+ - -g 记录函数之间的调用关系
+
 ### perf report
 前面通过perf record工具获得了某一进程的指标监控数据perf.data，下面就需要使用perf report工具查看该文件
 
@@ -106,3 +111,62 @@ $perf timechart
 ```
 
 perf timechart输出的是进程运行过程中系统调度的情况，无法对程序的具体代码段进行性能分析，但可以看出总结运行情况：running，idle，I/O等，
+
+### 火焰图生成
+火焰图(flame graph), 是基于 perf 结果产生的 SVG 图片，用来展示 CPU 的调用栈。
+
+火焰图y 轴表示调用栈，每一层都是一个函数。调用栈越深，火焰就越高，顶部就是正在执行的函数，下方都是它的父函数。x轴表示抽样数，如果一个函数在 x 轴占据的宽度越宽，就表示它被抽到的次数多，即执行的时间长。注意，x 轴不代表时间，而是所有的调用栈合并后，按字母顺序排列的。**火焰图就是看顶层的哪个函数占据的宽度最大。只要有”平顶”（plateaus），就表示该函数可能存在性能问题**。
+
+
+生成火焰图流程：
+
+```
+// 查看进程pid
+ps aux|grep name
+
+// 使用perf记录和生成
+perf record -F 99 -p 101503 -m 4 -g -a -- sleep 60
+perf script > out.perf
+```
+
+然后使用火焰图生成工具
+
+```
+git clone https://github.com/brendangregg/FlameGraph.git
+cd FlameGraph
+
+// 处理perf script
+./stackcollapse-perf.pl out.perf > out.folded
+
+// 绘制SVG
+./flamegraph.pl out.folded > pmCount.svg
+```
+
+当调用栈过深时，某些系统只返回前面的一部分（比如前10层）。有些函数没有名字，编译器只用内存地址来表示（比如匿名函数）。
+
+
+### 使用gproftodot生成dot图
+
+首先是安装gproftodot
+
+```
+apt-get install python3 graphviz
+
+```
+
+windows可以直接去graphviz的官网先下载官方安装包
+
+至于gproftodot其实只是一个单独的脚本，可以去下载standalone版本，也可以通过pip等工具安装
+
+```
+pip install gprof2dot
+```
+
+生成dot图：
+
+```
+perf script | gprof2dot.py -f perf | dot -Tpng -o  report_perf.png
+```
+
+(ubuntu1804 test ok)
+
