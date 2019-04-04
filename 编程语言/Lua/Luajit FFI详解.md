@@ -89,3 +89,10 @@ if curl then
     libcurl.curl_easy_cleanup(curl)
 end
 ```
+
+### ffi.string
+从char数组中获取lua string
+
+```
+str = ffi.string(req.body_)
+```
