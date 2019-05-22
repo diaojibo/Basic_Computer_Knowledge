@@ -75,3 +75,14 @@ make安装，结束整个编译过程。
 CC = /data/home/rockctli/bin/gcc-6.4.0/bin/gcc
 CXX = /data/home/rockctli/bin/gcc-6.4.0/bin/g++
 ```
+
+### 编译低版本gcc
+如果是高版本gcc编译低版本gcc，那会遇到一堆问题，所以极简配置就好：
+
+```
+CC=gcc-4.8 CXX=g++-4.8 ~/project/gcc-4.6.4/configure --prefix=/home/rockctli/self-build/gcc46 --mandir=/home/rockctli/self-build/gcc46/share/man --infodir=/home/rockctli/self-build/gcc46/share/info --enable-threads=posix  --disable-libunwind-exceptions --disable-multilib --enable-languages=c,c++
+```
+
+multilib disable掉,且只支持c和c++就够了。
+
+如果stdlib.so找不到符号啥的，可以`sudo find / -name "libstdc++.so.*"`找到一个可用的so然后替换。
