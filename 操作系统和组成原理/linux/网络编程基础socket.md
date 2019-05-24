@@ -183,6 +183,15 @@ ssize_t read(int fd, void *buf, size_t count);
 
 **要注意send函数把buf中的数据成功copy到s的发送缓冲的剩余空间里后它就返回了**，但是此时这些数据并不一定马上被传到连接的另一端。如果协议在后续的传送过程中出现网络错误的话，**那么下一个Socket相关的函数就会返回SOCKET_ERROR**。（每一个除send外的Socket函数在执 行的最开始总要先等待套接字的发送缓冲中的数据被协议传送完毕才能继续，如果在等待时出现网络错误，那么该Socket函数就返回 SOCKET_ERROR）
 
+
+注意send函数的是**分为阻塞或者不阻塞发送的**，区别就在于刚才所说的第四个参数flags,比如我可以这样设置非阻塞模式。
+
+
+``` c++
+send(scokfd, buff, buff_size, MSG_DONTWAIT);   //非阻塞模式的消息接受
+```
+
+
 ### recv函数
 
 ```
