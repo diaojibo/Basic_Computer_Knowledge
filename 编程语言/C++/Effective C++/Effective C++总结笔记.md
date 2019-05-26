@@ -1,4 +1,6 @@
-## Effective C++阅读总结
+# Effective C++阅读总结
+
+## 基本篇
 
 ### 以const,enum,inline替换#define(原则02)
 预编译时的信息不会被带到符号表
@@ -58,3 +60,18 @@ const的相关功能其实之前的const笔记里都有阐述，它高速编译�
 所以
 
 ![](image/eff6.png)
+
+## 设计原则篇
+
+### 接口参数类型可以更具体-18
+比如我们在设计日期类时,可以设计成：
+
+``` c++
+class Date{
+    public: Date(int day,int month, int year);
+}
+```
+
+但是这样设计，在人构造Date对象的时候，很容易令人记错参数顺序，或者给出了不合适的值。所以我们可以设计成传递进入三个结构体来传参。
+
+![](image/eff7.png)
