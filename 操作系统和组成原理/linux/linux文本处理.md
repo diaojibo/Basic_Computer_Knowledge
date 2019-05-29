@@ -252,3 +252,10 @@ root
 awk ' END {print NR}' file //统计文件的行数
 
 ```
+
+#### 合并奇偶行
+awk可以调用getline手动读取下一行：
+
+```
+awk '{tmp=$0;getline;print tmp" "$0}'
+```
