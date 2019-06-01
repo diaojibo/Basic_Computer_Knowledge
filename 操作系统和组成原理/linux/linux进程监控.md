@@ -11,6 +11,19 @@ linux上进程有5种状态:
  - 僵死(进程已终止, 但进程描述符存在, 直到父进程调用wait4()系统调用后释放)
  - 停止(进程收到SIGSTOP, SIGTSTP, SIGTTIN, SIGTTOU信号后停止运行运行)
 
+ps工具标识进程的5种状态码: 
+ - D 不可中断 uninterruptible sleep (usually IO) 
+ - R 运行 runnable (on run queue) 
+ - S 中断 sleeping 
+ - T 停止 traced or stopped 
+ - Z 僵死 a defunct (”zombie”) process 
+
+
+
+```
+ps -ef // 显示所有进程信息，连同命令行
+```
+
 ### pstack 跟踪进程栈
 此命令可显示每个进程的栈跟踪。pstack 命令必须由相应进程的属主或 root 运行。可以使用 pstack 来确定进程挂起的位置。此命令允许使用的唯一选项是要**检查的进程的 PID**。
 

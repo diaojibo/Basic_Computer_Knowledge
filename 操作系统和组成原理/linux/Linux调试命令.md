@@ -2,6 +2,13 @@
 
 <a>http://linuxtools-rst.readthedocs.io/zh_CN/latest/tool/gdb.html</a>
 
+### watch命令
+watch是一个非常实用的命令，基本所有的Linux发行版都带有这个小工具，如同名字一样，watch可以帮你监测一个命令的运行结果，省得你一遍遍的手动运行。在Linux下，watch是周期性的执行下个程序，并全屏显示执行结果。你可以拿他来监测你想要的一切命令的结果变化，比如 tail 一个 log 文件，ls 监测某个文件的大小变化，看你的想象力了！
+
+```
+// 每隔一秒高亮显示http链接数的变化情况
+watch -n 1 -d 'pstree|grep http'
+```
 
 ### gdb调试
 GDB是一个由GNU开源组织发布的、UNIX/LINUX操作系统下的、基于命令行的、功能强大的程序调试工具。 对于一名Linux下工作的c++程序员，gdb是必不可少的工具；
