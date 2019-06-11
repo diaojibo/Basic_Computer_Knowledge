@@ -74,12 +74,13 @@ find . -type f -mtime +10 -name "*.txt" -exec cp {} OLD \;
  - -n 打印匹配的行号
  - -i 搜索时忽略大小写
  - -l 只打印文件名
+ - -r 递归的对目录下的所有文件（包括子目录）进行 grep
 
 
 在多级目录中对文本递归搜索(程序员搜代码的最爱）:
 
 ```
-grep "class" . -R -n
+grep "class" . -Rn
 ```
 
 综合应用：将日志中的所有带where条件的sql查找查找出来:
