@@ -38,6 +38,7 @@ print(datetime.datetime.weekday(datetime.datetime.now()))  # 返回当天是本�
 print(datetime.datetime.isoweekday(datetime.datetime.now())) # 返回当天是本周的第几天，取值[1,7]
 print(datetime.datetime.ctime(datetime.datetime.now()))  # 将 时间对象 返回 时间字符串
 print(datetime.datetime.now().strftime('%a, %b %d %H:%M'))  # 将时间对象返回 时间字符串
+# datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') 
 ```
 
 获取timestamp用以下代码：
