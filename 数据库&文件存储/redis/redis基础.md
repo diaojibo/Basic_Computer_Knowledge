@@ -22,6 +22,8 @@ redis优势如下：
 
 ![](image/redis1.png)
 
+redis url格式：`redis://:password@hostname:port/db_number`
+
 ### 数据类型
 redis有五种数据类型：
  - String

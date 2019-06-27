@@ -28,3 +28,4 @@ celery架构图：
  -  Celery Worker：执行任务的消费者，通常会在多台服务器运行多个消费者来提高执行效率。
  -   Result Backend：任务处理完后保存状态信息和结果，以供查询。Celery默认已支持Redis、RabbitMQ、MongoDB、Django ORM、SQLAlchemy等方式。
 
+
