@@ -64,3 +64,15 @@ retstr = test.test_str_call(strtt)
 
 print(retstr)
 ```
+
+#### 安全调用
+其实上面的方法并不安全，因为返回的时候，output_buffer里的内容就会被回收掉了。其实不稳定，我们还是需要创建一个字符串buffer然后传递进去的：
+
+```
+t = ctypes.create_string_buffer(100)
+print(ctypes.sizeof(t))
+
+ttt = test.test_str_call(t)
+
+print(t.value)
+```
