@@ -92,6 +92,40 @@ wget repository_url
 
 或者可以推荐使用yum仓库管理工具`yum-config-manager`
 
+#### yum配置的进一步说明
+主配置文件在`/etc/yum.conf`这里，里面有个main section用来指示yum的主要信息。
+
+```
+# cat /etc/yum.conf
+[main]
+cachedir=/var/cache/yum/$basearch/$releasever
+keepcache=0
+debuglevel=2
+logfile=/var/log/yum.log
+exactarch=1
+obsoletes=1
+gpgcheck=1
+plugins=1
+installonly_limit=3
+```
+
+而 `/etc/yum.repos.d` 这个文件夹下的子repo文件，将会覆盖主配置。
+
+
+来看看这些repo文件的格式：
+
+```
+[epel]
+name=Extra Packages for Enterprise Linux 7 - $basearch
+baseurl=http://download.fedoraproject.org/pub/epel/7/$basearch
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
+```
+
+也是分成了好几个键值对，name代表仓库描述，baseurl是仓库地址，**enabled**决定这个仓库启用不启用，一定要注意了。
+
+
 ### 手动安装rpm
 yum源有时候就是设置不好，搞不对。那我们就直接找对应发行版的rpm包手动下载安装就好了。
 
