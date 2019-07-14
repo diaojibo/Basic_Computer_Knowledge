@@ -40,6 +40,26 @@ cc_library(
 
 ps: blade编译时，release版本默认加了O2优化。
 
+#### deps指定
+要注意，我们的c++编译的时候可能依赖于各种库。可能有系统库可能有第三方库，这里就需要我们在deps这里指定，假若我们在编译服务的时候出现一大堆的符号未定义，我们就需要想想是不是没有引入合适的库了：
+
+deps的允许的格式：
+
+ - “//path/to/dir/:name” 其他目录下的target，path为从BLADE_ROOT出发的路径，name为被依赖的目标名。看见就知道在哪里。
+ - “:name” 当前目录下的target， path可以省略。
+ - “#pthread” 系统库。直接写#跟名字即可。
+
+比如：
+
+```
+cc_binary(
+    name='prstr',
+    srcs=['./src/mystr_main/mystring.cpp'],
+    deps=['#pthread',':lowercase',':uppercase','#dl'],
+)
+```
+
+
 ### 利用环境变量指定不同的gcc编译
 事实上，在编译代码的时候还可采用不同的gcc版本来进行编译。
 
