@@ -160,3 +160,32 @@ LDFLAGS := ${LIBS} -Wl,-Bstatic ${STATIC_LIBS} -Wl,-Bdynamic ${DYN_LIBS}
 
 #### -ldl参数
 我们有时经常会见到-ldl，这倒不是特殊的参数，而是引入了dl这个库而已。我们需要动态加载so文件，则必须要引入dl这个库才能继续操作。
+
+### 再次强调有关动态库，静态库的搜索路径
+当一个程序ld在链接的时候，就会去找我们指定给它的动态库和静态库。
+
+注意，寻找库的时候，是分两种情况的。一种是我们链接的时候，这时我们可能需要静态库或者动态库，会根据系统某些搜搜路径来，优先顺序如下：
+
+```
+1、gcc编译、链接命令中的-L选项；
+2、gcc的环境变量的LIBRARY_PATH（多个路径用冒号分割）；
+3、gcc默认动态库目录：/lib:/usr/lib:usr/lib64:/usr/local/lib。
+```
+
+简而言之就是gcc -L传递值，以及环境变量LIBRARY_PATH，默认没有。gcc也有自己的默认search path。这些就是链接时候默认的搜寻路径，gcc默认搜寻路径可以通过以下命令看到：
+
+```
+g++ --print-search-dir
+gcc --print-search-dir
+```
+
+以上是链接过程中，找库的情况。还有一种情况是在运行时，load 动态库时的情况。也就是所谓的dlopen等，这时搜寻顺序为：
+
+```
+1、编译目标代码时指定的动态库搜索路径：用选项-Wl,rpath和include指定的动态库的搜索路径，比如gcc -Wl,-rpath,include -L. -ldltest hello.c，在执行文件时会搜索路径`./include`；
+2、环境变量LD_LIBRARY_PATH（多个路径用冒号分割）；
+3、在 /etc/ld.so.conf.d/ 目录下的配置文件指定的动态库绝对路径（通过ldconfig生效，一般是非root用户时使用）；
+4、gcc默认动态库目录：/lib:/usr/lib:usr/lib64:/usr/local/lib等。
+```
+
+这里涉及到的环境变量是：LD_LIBRARY_PATH，所以千万不要把这个和刚才的LIBRARY_PATH搞混噢。

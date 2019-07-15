@@ -59,6 +59,10 @@ cc_binary(
 )
 ```
 
+#### 有关cc_binary
+blade的cc_binary,是默认会打开-static-libstdc++的，也就是说会把stdc++的**静态库(.a)**编译进去，所以系统比如centos一定要记得安装libstdc++的staic版本噢噢。
+
+
 
 ### 利用环境变量指定不同的gcc编译
 事实上，在编译代码的时候还可采用不同的gcc版本来进行编译。
@@ -83,6 +87,8 @@ TOOLCHAIN_DIR=/usr/bin blade build
 
 直接在执行命令之前就指定gcc目录啦，这就可以编译了。
 
+#### verbose
+编译过程可能会遇到很多坑，打开verbose检查就好啦。
 
 ### 第三方库工程的组织
 经过我对公司项目的观察，发现第三方库整合进项目一般都如下组织。

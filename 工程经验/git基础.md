@@ -1,6 +1,19 @@
 ## git基础
 记录一些git的实践操作。
 
+### git stash
+git的贮藏命令，用来帮你暂存修改，返回到最近的commit状态，活用的话很有用。
+
+比如远端更新，自己的修改想舍弃了，pull下来又要有冲突，那就先stash一波，然后清空栈就ok了
+
+```
+git stash
+// 查看stash栈内保存的状态
+git stash list
+// 清空
+git stash clear
+```
+
 ### 合并分支(rebase&merge)
 其实在git中，合并分支其实有两种形式，一种是merge，一种是rebase。我们先讲讲`git rebase`
 
