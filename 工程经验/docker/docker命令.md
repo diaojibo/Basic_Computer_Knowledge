@@ -83,3 +83,14 @@ my_nginx
 ```
 docker rm [ 容器名 or 容器 id ]
 ```
+
+### docker save
+这个命令用于导入导出容器
+
+将镜像 runoob/ubuntu:v3 生成 my_ubuntu_v3.tar 文档
+
+```
+runoob@runoob:~$ docker save -o my_ubuntu_v3.tar runoob/ubuntu:v3
+runoob@runoob:~$ ll my_ubuntu_v3.tar
+-rw------- 1 runoob runoob 142102016 Jul 11 01:37 my_ubuntu_v3.tar
+```
