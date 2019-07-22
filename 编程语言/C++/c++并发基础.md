@@ -16,16 +16,20 @@ Mutex 又称互斥量，C++ 11中与 Mutex 相关的类（包括锁类型）和�
 Mutex 系列类(四种)
 
  - std::mutex，最基本的 Mutex 类。
- - std::recursive_mutex，递归 Mutex 类。
+ - std::recursive_mutex，**递归 Mutex 类(也叫可重入锁)**。
  - std::time_mutex，定时 Mutex 类。
  - std::recursive_timed_mutex，定时递归 Mutex 类。
+
+**同一个线程可以多次获取同一个递归锁recursive_mutex，不会产生死锁。而如果一个线程多次获取同一个非递归锁，则会产生死锁。**
 
 Lock 类（两种）
 
  - std::lock_guard，与 Mutex RAII 相关，方便线程对互斥量上锁。
  - std::unique_lock，与 Mutex RAII 相关，方便线程对互斥量上锁，但提供了更好的上锁和解锁控制。
 
-（译注：**所谓的RAII，全称为Resource Acquisition Is Initialization**，汉语是“资源获取即初始化”。但是这个直译并没有很好地解释这个词组的含义。其实含义并不高深复杂，简单说来就是，在资源获取的时候将其封装在某类的object中，利用"栈资源会在相应object的生命周期结束时自动销毁"来自动释放资源，即，将资源释放写在析构函数中。所以这个RAII其实就是和智能指针的实现是类似的。）
+（译注：**所谓的RAII，全称为Resource Acquisition Is Initialization**，汉语是“资源获取即初始化”。但是这个直译并没有很好地解释这个词组的含义。其实含义并不高深复杂，简单说来就是，在资源获取的时候将其封装在某类的object中，利用"栈资源会在相应object的生命周期结束时自动销毁"来自动释放资源，即，将资源释放写在析构函数中。所以这个RAII其实就是和智能指针的实现是类似的。）【20190722 见RAII笔记】
+
+
 
 ### lock_guard
 lock_guard 对象通常用于管理某个锁(Lock)对象，因此与 Mutex RAII 相关，方便线程对互斥量上锁，即在某个 lock_guard 对象的声明周期内，它所管理的锁对象会一直保持上锁状态；而 lock_guard 的生命周期结束之后，它所管理的锁对象会被解锁(注：**类似 shared_ptr 等智能指针管理动态分配的内存资源** )。
