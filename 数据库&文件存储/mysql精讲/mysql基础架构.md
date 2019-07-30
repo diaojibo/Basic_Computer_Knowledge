@@ -1,5 +1,5 @@
-## mysql基础
-记录一下mysql的基础概念。
+## mysql基础架构
+记录一下mysql的基础架构概念。
 
 ### mysql基本架构
 
