@@ -34,3 +34,46 @@ rain?(no)->go->e
 5. inputoutput, 表示程序的输入输出
 6. right,left, 表示箭头在当前模块上的起点(默认箭头从下端开始)
 7. yes,no, 表示condition判断的分支(其可以和right,left同时使用)
+
+### mermaid画图
+Mermaid 是一个用于画流程图、状态图、时序图、甘特图的库，使用 JS 进行本地渲染，广泛集成于许多 Markdown 编辑器中。
+
+#### 时序图
+
+下面是时序图的代码
+
+```
+sequenceDiagram
+    participant Alice
+    participant Bob
+    Alice->>John: Hello John, how are you?
+    loop Healthcheck
+        John->>John: Fight against hypochondria
+    end
+    Note right of John: Rational thoughts <br/>prevail!
+    John-->>Alice: Great!
+    John->>Bob: How about you?
+    Bob-->>John: Jolly good!
+```
+
+可以生成图：
+
+
+
+```mermaid
+sequenceDiagram
+    participant Alice
+    participant Bob
+    Alice->>John: Hello John, how are you?
+    loop Healthcheck
+        John->>John: Fight against hypochondria
+    end
+    Note right of John: Rational thoughts <br/>prevail!
+    John-->>Alice: Great!
+    John->>Bob: How about you?
+    Bob-->>John: Jolly good!
+```
+
+
+
+是不是相当方便。
