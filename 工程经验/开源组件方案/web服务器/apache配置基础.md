@@ -38,3 +38,4 @@ AllowOverride：允许存在于.htaccess文件中的指令类型(.htaccess文件
 Order：控制在访问时Allow和Deny两个访问规则哪个优先
 
 DirectoryIndex index.html index.htm index.php #主页文件的设置
+
