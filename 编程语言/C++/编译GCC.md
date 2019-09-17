@@ -9,10 +9,10 @@
 
 我们有以下几个依赖要提前下好，几乎是属于必备的：
 
- - gmp
- - mpfr
- - mpc
- - isl
+ - [gmp](https://ftp.gnu.org/gnu/gmp/gmp-6.1.2.tar.xz)
+ - [mpfr](https://ftp.gnu.org/gnu/mpfr/mpfr-4.0.2.tar.gz)
+ - [mpc](https://ftp.gnu.org/gnu/mpc/mpc-1.1.0.tar.gz)
+ - [isl](http://isl.gforge.inria.fr/isl-0.21.tar.gz)
 
 我们在依赖网站上，一一去对应的网站下载好对应的压缩包：
 
