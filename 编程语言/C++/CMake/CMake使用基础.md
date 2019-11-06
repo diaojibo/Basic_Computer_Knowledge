@@ -95,6 +95,20 @@ cd soci
 mkdir build
 cd build
 cmake .. -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/third_party/soci
+
 make install
 
+```
+
+编译cmake时如果要指定编译器位置，那就要控制这个变量拉
+
+```
+CC=/usr/local/gcc9/bin/gcc CXX=/usr/local/gcc9/bin/g++ cmake .. -DCMAKE_INSTALL_PREFIX=/home/rockctli/third_bin 
+
+```
+
+**如果要指定libstdc++或者其他动态库的位置，那就**
+
+```
+cmake .. -DCMAKE_INSTALL_PREFIX=/home/rockctli/third_bin -DCMAKE_EXE_LINKER_FLAGS='-Wl,-rpath,/usr/local/gcc9/lib64'
 ```
