@@ -65,3 +65,4 @@ bf3(10); ///< same as a.Func(10, 100)
 ```
 
 上面bf3，就是定义一个伪函数function容器bf3，并用bind func来初始化，绑定了实例对象a的成员函数Func，切把第二个参数int也固定了。
+

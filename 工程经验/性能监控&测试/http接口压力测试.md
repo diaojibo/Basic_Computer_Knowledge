@@ -61,3 +61,40 @@ http配置完以后，我们还需要添加一些图形组件来帮助我们观�
 ![](image/jmeter7.png)
 
 聚合报告组件则能看到我们本次压测执行的结果信息。
+
+
+
+### ab 工具
+
+ab 测试工具是 Apache 提供的一款测试工具，具有简单易上手的特点，在测试 Web 服务时非常实用。
+
+ab 可以在 Windows 系统中使用，也可以在 Linux 系统中使用。这里我说下在 Linux 系统中的安装方法，非常简单，只需要在 Linux 系统中输入 yum-y install httpd-tools 命令，就可以了。
+
+ab 工具用来测试 post get 接口请求非常便捷，可以通过参数指定请求数、并发数、请求参数等。
+
+例如，一个测试并发用户数为 10、请求数量为 100 的的 post 请求输入如下：
+
+```
+ab -n 100  -c 10 -p 'post.txt' -T 'application/x-www-form-urlencoded' 'http://test.api.com/test/register'
+```
+
+
+
+### wrk
+
+wrk is a modern HTTP benchmarking tool capable of generating significant load when run on a single multi-core CPU. It combines a multithreaded design with scalable event notification systems such as epoll and kqueue.
+
+
+
+安装wrk
+
+```
+sudo yum groupinstall 'Development Tools'
+sudo yum install -y openssl-devel git 
+git clone https://github.com/wg/wrk.git wrk
+cd wrk
+make
+# 将可执行文件移动到 /usr/local/bin 位置
+sudo cp wrk /usr/local/bin
+```
+

@@ -20,6 +20,10 @@ Boost.Asio 进行异步数据处理的应用程序基于两个概念：I/O 服�
 
  I/O 服务抽象了操作系统的接口，Boost.Asio使用*io_service*同操作系统的输入/输出服务进行交互，而 I/O 对象则用于初始化特定的操作。
 
+**update：注意！新版asio中，io service这个类已经废弃，现在要用io_context**
+
+
+
 理解这个两个概念，比较中重要，这是asio的设计，对应到代码中，如下：
 
 ```cpp
