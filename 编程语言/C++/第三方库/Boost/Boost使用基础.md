@@ -52,8 +52,10 @@ with-libraries可以帮助你选择需要编译出哪些库，不过也不用的
 
 prefix选项则当然是安装路径了。全部设定好以后，就可以开始编译安装了
 
+有时候静态库的编译也别忘了加fpic噢
+
 ```
-./b2
+./b2 cxxflags=-fpic install
 ```
 
 
