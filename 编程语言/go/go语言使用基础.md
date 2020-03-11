@@ -70,3 +70,62 @@ go get
 
 #### go install&build
 执行go build会在当前目录生成一个和包名一致的可执行文件，go install则会在bin目录下产生。
+
+
+
+### Go modules
+
+在go 1.11 版本后 **配置GOPATH已经不是必须的玩意了**、
+
+开启go modules，我们可以把go工程放任何地方，不过前提好还是GOROOT要配好
+
+接下来我们将正式的进入使用，首先你需要有一个你喜欢的目录，例如：`$ mkdir ~/go-application && cd ~/go-application`，然后执行如下命令：
+
+
+
+```shell
+$ mkdir go-gin-example && cd go-gin-example
+
+$ go env -w GO111MODULE=on
+
+$ go env -w GOPROXY=https://goproxy.cn,direct
+
+$ go mod init github.com/EDDYCJY/go-gin-example
+go: creating new go.mod: module github.com/EDDYCJY/go-gin-example
+
+$ ls
+go.mod
+```
+
+- `mkdir xxx && cd xxx`：创建并切换到项目目录里去。
+- `go env -w GO111MODULE=on`：打开 Go modules 开关（目前在 Go1.13 中默认值为 `auto`）。
+- `go env -w GOPROXY=...`：设置 GOPROXY 代理，这里主要涉及到两个值，第一个是 `https://goproxy.cn`，它是由七牛云背书的一个强大稳定的 Go 模块代理，可以有效地解决你的外网问题；第二个是 `direct`，它是一个特殊的 fallback 选项，它的作用是用于指示 Go 在拉取模块时遇到错误会回源到模块版本的源地址去抓取（比如 GitHub 等）。
+- `go mod init [MODULE_PATH]`：初始化 Go modules，它将会生成 go.mod 文件，需要注意的是 `MODULE_PATH` 填写的是模块引入路径，你可以根据自己的情况修改路径。
+
+
+
+**我们只需要敲下 go mod init name， 就可以初始化一个go项目了**
+
+每次我们更新依赖，就会有**go.sum**文件来记住我们的依赖版本
+
+下面一些常用的go mod命令要记住
+
+
+
+- `go get -u` 更新现有的依赖
+- `go mod download` 下载 go.mod 文件中指明的所有依赖
+- 用 `go mod tidy` 整理现有的依赖
+
+- 用 `go mod graph` 查看现有的依赖结构
+
+
+
+#### replace
+
+我们使用go mod写自己的项目的时候，有时肯定是会引用到自己的包的。
+
+这时我们也需要在mod文件里记下来才行
+
+![image-20200310182307877](image/image-20200310182307877.png)
+
+要用replace注册一下最好
