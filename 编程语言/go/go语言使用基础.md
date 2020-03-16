@@ -45,6 +45,8 @@ D:\MyWorks  <<--- GOPATH 指向的位置
 #### GOPATH
 go项目所在的目录，也就是刚才提到的src目录的上一层。
 
+新版的go安装之时间，gopath会被自动设置在~/go下
+
 #### 命令源码文件
 我们想要执行go文件，那么这个go文件就必须是 **命令源码文件**。命令源码文件需要有一个main函数，而且这个文件必须属于package main，否则会不能执行
 
@@ -70,3 +72,11 @@ go get
 
 #### go install&build
 执行go build会在当前目录生成一个和包名一致的可执行文件，go install则会在bin目录下产生。
+
+**此时注意，我们在import引入包的时候，其实是以GOPATH为根目录的**
+
+比如你可以把你的可执行(项目)包，安放在某个 $GOPATH/src下，例如 $GOPATH/src/app/youpackagedir
+
+这样本地包的import就变成
+
+`import "app/yourpackagedir/subpackage"`
