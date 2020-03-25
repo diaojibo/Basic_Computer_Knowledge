@@ -80,3 +80,24 @@ go get
 这样本地包的import就变成
 
 `import "app/yourpackagedir/subpackage"`
+
+
+
+### go mod replace
+
+本地项目查找依赖的时候，我们经常要在mod文件里这么干
+
+```go
+module github.com/EDDYCJY/go-gin-example
+
+go 1.13
+
+require (...)
+
+replace (
+		pkg/setting => ./pkg/setting
+)
+```
+
+通过这样把某些包的查找路径链接到本地，这样可以跳转。
+
