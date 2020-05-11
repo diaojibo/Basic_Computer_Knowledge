@@ -67,7 +67,7 @@ func HandleHello(c *gin.Context) {
 }
 ```
 
-
+Param的true和false表示这个参数是否必须
 
 最后，在我们的gin 路由中，加上swag前端页面的导入
 
