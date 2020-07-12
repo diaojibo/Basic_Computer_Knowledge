@@ -41,9 +41,9 @@ Kubernetes 项目的架构，跟它的原型项目 Borg 非常类似，都由 Ma
 
 zwlj：上面k8s的架构可能没说清，这里再记录一下。k8s整个架构其实就如上图，分为两个大部分，一个是Master部分，一个是Node部分。
 
-Node部分就是上图下部，一个Node可以理解为一台物理机。里面部署着的是一个一个的docker容器，除此之外还有一个程序要关注的，叫kubelet，**这个kubelet可以理解为就是一个agent**，负责启停docker容器。外部来了命令会传给kubelet，吩咐它启停容器。
+Node部分就是上图下部，一个Node可以理解为一台物理机。里面部署着的是一个一个的docker容器，除此之外还有一个程序要关注的，叫kubelet，**这个kubelet可以理解为就是一个agent**，负责启停docker容器。外部来了命令会传给kubelet，吩咐它启停容器。**一个物理机node上一般会布置许多pod，但一般就是部署一个kubelet**
 
-Master就是上部分，分为几个程序或者说组件，其中就是**ApiServer，Controller，Scheduler**，ApiServer负责和Node的Kubelet交互，当有命令要扩展pod节点的时候，都会通过ApiServer跟kubelet通信。Scheduler负责调度，比如sheduler会判断哪个机器node负载低，那就会调度到这个上面去。Controller作为控制器，也是控制pod的启动的，当发现目标pod数量过低时，controller就会负责通知启动pod
+Master就是上部分，分为几个程序或者说组件，其中就是**ApiServer，Controller manager，Scheduler**，ApiServer负责和Node的Kubelet交互，当有命令要扩展pod节点的时候，都会通过ApiServer跟kubelet通信。Scheduler负责调度，比如sheduler会判断哪个机器node负载低，那就会调度到这个上面去。Controller作为控制器，也是控制pod的启动的，当发现目标pod数量过低或者不满足需求时，controller就会负责通知启动pod。**注意，controller manger是有很多的，用户可以根据自己的需求进行定制**
 
 总的来说就是，scheduler负责调度部署到哪台机器，controller负责监控整个pod数量是否满足要求，apiserver用来做交互，etcd用来存储node集群的状态信息。
 
