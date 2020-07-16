@@ -227,7 +227,38 @@ var slice1 []type = make([]type, len)
 slice1 := make([]type, len)
 ```
 
+#### 数组
+
+讲到切片slice，不得不再讲讲go里的数组，go里也是有数组这个概念的，类型定长的列表就是数组。**数组是具有相同唯一类型的一组已编号且长度固定的数据项序列**
+
+```go
+var balance [10] float32
+```
+
+上面就定义了一个长度为10的数组，如果不定长，那就是slice切片。
+
+#### 切片
+
+我们还不够理解切片，切片不是像C语言一样，是一个数组头部的指针，并不是这样的。
+
+slice在go里的结构体如下 reflect.SliceHeader：
+
+```go
+type SliceHeader struct {
+    Data uintptr
+    Len  int
+    Cap  int
+}
+```
+
+![1593660498533](image/1593660498533.png)
+
+这下就很清楚了，切片也不过是个结构体，有三个元素 ptr len cap。所以当我们**函数传递切片**的时候，传递的就是这个header(只是复制切片头信息（`reflect.SliceHeader`）)，底层的数组是一致的。**所以放心大胆的去传递切片，不会有冗余拷贝的问题**。
+
+
+
 ### range
+
 Go 语言中 range 关键字用于 for 循环中迭代数组(array)、切片(slice)、通道(channel)或集合(map)的元素。
 
 **在数组和切片中它返回元素的索引和索引对应的值，在集合中返回 key-value 对的 key 值。**
@@ -263,7 +294,47 @@ func (c Circle) getArea() float64 {
 }
 ```
 
+上面的描述还有些欠缺，再来理一理成员方法，也就是所谓的**方法接收器**
+
+在Go语言中，将函数绑定到具体的类型中，则称该函数是该类型的方法，其定义的方式是在func与函数名称之间加上具体类型变量，这个类型变量称为`方法接收器`
+
+```go
+func setName(m Member,name string){//普通函数
+    m.Name = name
+}
+
+func (m Member)setName(name string){//绑定到Member结构体的方法
+    m.Name = name
+}
+
+```
+
+通过`方法接收器`可以访问结构体的字段，这类似其他编程语言中的this关键词，但在Go语言中，只是一个变量名而已，我们可以任意命名`方法接收器`。
+
+```go
+m := Member{}
+m.setName("小明")
+fmt.Println(m.Name)//输出为空
+```
+
+上面的代码中，我们会很奇怪，不是调用setName()方法设置了字段Name的值了吗？为什么还是输出为空呢？
+
+这是因为，**结构体是值传递**，当我们调用setName时，方法接收器接收到是只是结构体变量的一个副本，通过副本对值进行修复，并不会影响调用者，因此，**我们可以将方法接收器定义为指针变量，就可达到修改结构体的目的了**。
+
+```go
+func (m *Member)setName(name string){/将Member改为*Member
+    m.Name = name
+}
+
+m := new(Member)
+m.setName("小明")
+fmt.Println(m.Name)//小明
+```
+
+
+
 ### 接口
+
 go里的接口也比较独特，它把所有的具有共性的方法定义在一起，**任何其他类型只要实现了这些方法就是实现了这个接口。**
 
 不需要你显示区implement这个接口

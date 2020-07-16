@@ -55,4 +55,3 @@ func main() {}
 go build -buildmode c-shared -o ./build/go_main.so
 ```
 
-j
