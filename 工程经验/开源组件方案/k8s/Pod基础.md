@@ -1,5 +1,19 @@
 ## Pod使用
 
+### 根容器
+
+每个 Pod 中的容器由一个特殊的 **Pause 容器**，及一个或多个紧密相关的业务容器组成。Pause 容器是 Pod 的根容器，对应的镜像属于 Kubernetes 平台的一部分，以它的状态代表整个容器组的状态。同一个 Pod 里的容器之间仅需通过 localhost 就能互相通信。
+
+每个 Pod 会被 Kubernetes 网络组件分配一个唯一的(在集群内的 IP 地址，称为 Pod IP，这样就允许不同 Pod 中的服务可以使用同一端口
+
+
+
+![img](image/77b0ffa32eb76bfa330bfa88b686f5c9.jpg)
+
+ps：pasue进程创建以后，业务进程会加入到pasue进程当中。怎么理解加入两个字呢，其实就是可以了解为业务进程作为了pasue进程的子进程。pasue进程创建了一个namesapce，pid为1。 业务进程也加入了这个namespace，并且加入到了pasuse子进程树的树形结构当中。这么做，僵尸进程就能很好被管理。
+
+### 一些yaml字段解释
+
 介绍 Pod  yaml中几个重要字段的含义和用法。
 
 **NodeSelector：是一个供用户将 Pod 与 Node 进行绑定的字段**，用法如下所示：
