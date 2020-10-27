@@ -35,6 +35,33 @@ Kubernetes 项目的架构，跟它的原型项目 Borg 非常类似，都由 Ma
 
 而**kubelet 的另一个重要功能，则是调用网络插件和存储插件为容器配置网络和持久化存储**。这两个插件与 kubelet 进行交互的接口，分别是 CNI（Container Networking Interface）和 CSI（Container Storage Interface）。
 
+#### apiserver
+
+集群的统一入口，以restful的方式，持久化数据交给etcd存储。比如假如我要部署个什么应用，那就要经过这个apiserver发请求
+
+#### scheduler
+
+控制节点调度，选择node节点应用部署
+
+#### controller-manager
+
+用来做资源控制，一个资源对应一个控制器。选择好node节点部署后，还有一些控制逻辑。比如什么时候创建或者删除pod，pod维持在几个，这种逻辑。总结一下就是，通过controller：
+
+- 确保预期pod数量
+- 无状态和有状态应用部署
+- 确保所有node运行同一种pod
+- 控制一次性和定时任务
+
+#### kubelet
+
+管理本机容器的各种操作，对应一个node机器
+
+#### kube-proxy
+
+![1603378929323](image/1603378929323.png)
+
+网络代理，做负载均衡
+
 ### k8s 架构再谈
 
 ![K8så¥é- Pizza's - Medium](image/0_MUyjPDYs83l4I3fO.jpg)
