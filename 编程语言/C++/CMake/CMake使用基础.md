@@ -68,7 +68,35 @@ set(COMMON_OBJ A B C)
 add_executable(Main ${COMMON_OBJ})
 ```
 
+### find_package命令
+
+cmake有机制能帮助用户更方便的引入第三方库
+
+cmake官方为我们预定义了许多寻找依赖包的Module，他们存储在`path_to_your_cmake/share/cmake-<version>/Modules`目录下
+
+![1616248526789](image/1616248526789.png)
+
+在cmake某个目录下，有很多名字带有Find的cmake文件，里面就是定义了如何去找一些第三方库。cmake官方都为我们准备好了
+
+以curl库为例，假设我们项目需要引入这个库，我们看到官方已经定义好了FindCURL.cmake。所以我们在CMakeLists.txt中可以直接用find_pakcage进行引用。
+
+```cmake
+find_package(CURL)
+add_executable(curltest curltest.cc)
+if(CURL_FOUND)
+    target_include_directories(clib PRIVATE ${CURL_INCLUDE_DIR})
+    target_link_libraries(curltest ${CURL_LIBRARY})
+else(CURL_FOUND)
+    message(FATAL_ERROR ”CURL library not found”)
+endif(CURL_FOUND)
+```
+
+可以通过`<LibaryName>_FOUND` 来判断模块是否被找到，如果没有找到，按照工程的需要关闭 某些特性、给出提醒或者中止编译，上面的例子就是报出致命错误并终止构建。 如果`<LibaryName>_FOUND` 为真，则将`<LibaryName>_INCLUDE_DIR` 加入 INCLUDE_DIRECTORIES，
+
+其中可知此时`CURL_FOUND`和`CURL_LIBRARY`此时都是可以获取的变量，通过这种方式，无论是CURL库还是BOOST等知名的第三方库都能很方便的引入到cmake的项目中了。
+
 ### cmake命令使用
+
 两种使用方式：
 
  - cmake [option] <path-to-source\> 指向含有顶级CMakeLists.txt的那个目录
