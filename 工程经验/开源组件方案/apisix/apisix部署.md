@@ -123,3 +123,12 @@ etcd:
 curl http://127.0.0.1:9080/apisix/admin/plugins/reload -H 'X-API-KEY: edd1c9f034335f136f87ad84b625c8f1' -X PUT
 ```
 
+如果想插件在dashboard里显示，必须进入到dashboard的目录，把schema文件放进conf目录中才行
+
+```
+curl 127.0.0.1:9090/v1/schema > schema.json
+```
+
+![1616508598162](image/1616508598162.png)
+
+重启dashboard即刻生效
